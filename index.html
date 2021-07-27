@@ -118,36 +118,32 @@
 
             function GetSlots()
             {
-                // get selected dates
                 var startDate;
                 var endDate;
-
                 var today = new Date();
                 var tomorrow = new Date();
                 tomorrow.setDate(today.getDate() + 1);
 
-
+                // get start date
                 var start = document.getElementById("startDate");
                 if(start == null)
-                {
                     startDate = today
-                }
                 else
-                {
                     startDate = document.getElementById("startDate").value;
-                }
 
+                // get end date
                 var end = document.getElementById("endDate");
                 if(end == null)
-                {
                     endDate = tomorrow;
-                }
                 else
-                {
                     endDate = document.getElementById("endDate").value;
-                }
 
-                // get slot type
+                // get service/slot type
+                var service = document.getElementById("serviceType");
+                if(serviceType == null)
+                    service = 'EVisit'
+                else
+                    service = serviceType.options[serviceType.selectedIndex].text;
 
 
                 // get Slot
@@ -177,14 +173,12 @@
                             document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
                             GetSlotsTable(slots);
 
-                            alert(startDate);
-                            alert(formatDate_yyyymmdd(startDate));
+                            // set date control values
                             document.getElementById("startDate").value = formatDate_yyyymmdd(startDate);
                             document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
 
-                            //document.getElementById("startDate").value = "2021-11-10";
-                            //document.getElementById("endDate").value = "2021-11-11";                            
-                            
+                            // set service/slot type control value
+                            document.getElementById("serviceType").value = service;
                         },
                         function(error) {
                             document.getElementById("slots").innerText = error.stack;
