@@ -144,21 +144,23 @@
                 newAppointment.slot.reference = "Slot/" + slotId;
                 //alert("newAppointment : \n" + newAppointment);
 
-                client.create(newAppointment(), {})
-                .then(
-                    function(data) {
-                    console.log(data);
-                });
+                FHIR.oauth2.ready().then(function(client) {
+                    client.create(newAppointment(), {})
+                    .then(
+                        function(data) {
+                        console.log(data);
+                    });
 
-                // // echo the newly created appointment (or any error)
-                // .then(
-                //     function(appts) {
-                //         document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
-                //     },
-                //     function(error) {
-                //         document.getElementById("appointments").innerText = error.stack;
-                //     }
-                // );
+                    // // echo the newly created appointment (or any error)
+                    // .then(
+                    //     function(appts) {
+                    //         document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
+                    //     },
+                    //     function(error) {
+                    //         document.getElementById("appointments").innerText = error.stack;
+                    //     }
+                    // );
+                }).catch(console.error);
 
             }
 
