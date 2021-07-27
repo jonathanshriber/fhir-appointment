@@ -149,29 +149,34 @@
                 slotQuery += "start=lt" + formatDate_yyyymmdd(endDate);
                 alert(slotQuery);
 
-                //client.request("/Slot?slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387&start=ge2021-07-27T00:00:00.000Z&start=lt2021-07-28T00:00:00.000Z", {})
-                client.request(slotQuery, {})
+                FHIR.oauth2.ready().then(function(client) {
 
-                // Reject if no Slots are found
-                .then(function(data) {
-                    if (!data.entry || !data.entry.length) {
-                        throw new Error("No slots found for the selected patient");
-                    }
-                    return data.entry;
-                })
+                    //==================================================================================================
+                    //client.request("/Slot?slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387&start=ge2021-07-27T00:00:00.000Z&start=lt2021-07-28T00:00:00.000Z", {})
+                    client.request(slotQuery, {})
 
-                // Render the current patient's slots (or any error)
-                .then(
-                    function(slots) {
-                        document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
-                        GetSlotsTable(slots);
-                        
-                    },
-                    function(error) {
-                        document.getElementById("slots").innerText = error.stack;
-                    }
-                );
-            
+                    // Reject if no Slots are found
+                    .then(function(data) {
+                        if (!data.entry || !data.entry.length) {
+                            throw new Error("No slots found for the selected patient");
+                        }
+                        return data.entry;
+                    })
+
+                    // Render the current patient's slots (or any error)
+                    .then(
+                        function(slots) {
+                            document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
+                            GetSlotsTable(slots);
+                            
+                        },
+                        function(error) {
+                            document.getElementById("slots").innerText = error.stack;
+                        }
+                    );
+                    //=========================================================================================================
+                    }).catch(console.error);
+           
             }
 
         </script>
@@ -236,13 +241,6 @@
                         document.getElementById("appointments").innerText = error.stack;
                     }
                 );
-
-
-
-                
-
-
-          
 
             }).catch(console.error);
 
