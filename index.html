@@ -94,7 +94,7 @@
                     ":" + (d.getUTCMinutes() < 10 ? '0' + d.getUTCMinutes() : d.getUTCMinutes() );
             }
 
-            function formatDate_yyyymmdd_zeroHour(dateString)
+            function formatDate_yyyymmdd(dateString)
             {
                 var d = new Date(dateString);
                 return d.getUTCFullYear() + 
@@ -102,7 +102,7 @@
                     "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate());
             }
             
-            function formatDate_yyyymmdd(dateString)
+            function formatDate_yyyymmdd_zeroHour(dateString)
             {
                 var d = new Date(dateString);
                 return d.getUTCFullYear() + 
