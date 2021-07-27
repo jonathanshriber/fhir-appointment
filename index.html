@@ -168,6 +168,8 @@
                         function(slots) {
                             document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
                             GetSlotsTable(slots);
+                            document.getElementById("startDate").value = formatDate_yyyymmdd(startDate);
+                            document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
                             
                         },
                         function(error) {
