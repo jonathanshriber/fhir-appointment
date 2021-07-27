@@ -72,8 +72,9 @@
             function getServiceType(slot)
             {
                 var serviceDesc = "";
-                if(slot.resource.type.coding.length > 0)
-                    serviceDesc = slot.resource.type.coding[0].display;
+                var len = slot.resource.type.coding.length;
+                if(len > 0)
+                    serviceDesc = slot.resource.type.coding[len-1].display;
 
                 return serviceDesc;
             }
@@ -150,9 +151,6 @@
                     serviceType = 'EVisit'
                 else
                     serviceType = service.options[service.selectedIndex].text;
-
-
-                alert("serviceTypeDict : " + serviceTypeDict[serviceType]);
 
                 // get Slot
                 var slotQuery = "/Slot?";
