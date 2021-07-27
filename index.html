@@ -94,6 +94,15 @@
                     ":" + (d.getUTCMinutes() < 10 ? '0' + d.getUTCMinutes() : d.getUTCMinutes() );
             }
 
+            function formatDate_yyyymmdd_zeroHour(dateString)
+            {
+                var d = new Date(dateString);
+                return d.getUTCFullYear() + 
+                    "-" + ((d.getUTCMonth()+1) < 10 ? '0' + (d.getUTCMonth()+1) : (d.getUTCMonth()+1)) +
+                    "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate()) +
+                    "T00:00:00.000Z";
+            }
+            
             function formatDate_yyyymmdd(dateString)
             {
                 var d = new Date(dateString);
@@ -101,7 +110,7 @@
                     "-" + ((d.getUTCMonth()+1) < 10 ? '0' + (d.getUTCMonth()+1) : (d.getUTCMonth()+1)) +
                     "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate()) +
                     "T00:00:00.000Z";
-            }            
+            }                    
 
             function MakeAppointment(slotId)
             {
@@ -145,8 +154,8 @@
                 // get Slot
                 var slotQuery = "/Slot?";
                 slotQuery += "slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387" + "&";
-                slotQuery += "start=ge" + formatDate_yyyymmdd(startDate) + "&";
-                slotQuery += "start=lt" + formatDate_yyyymmdd(endDate);
+                slotQuery += "start=ge" + formatDate_yyyymmdd_zeroHour(startDate) + "&";
+                slotQuery += "start=lt" + formatDate_yyyymmdd_zeroHour(endDate);
                 alert(slotQuery);
 
                 FHIR.oauth2.ready().then(function(client) {
