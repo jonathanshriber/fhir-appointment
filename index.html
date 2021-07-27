@@ -99,8 +99,7 @@
                 var d = new Date(dateString);
                 return d.getUTCFullYear() + 
                     "-" + ((d.getUTCMonth()+1) < 10 ? '0' + (d.getUTCMonth()+1) : (d.getUTCMonth()+1)) +
-                    "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate()) +
-                    "T00:00:00.000Z";
+                    "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate());
             }
             
             function formatDate_yyyymmdd(dateString)
@@ -177,13 +176,14 @@
                         function(slots) {
                             document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
                             GetSlotsTable(slots);
-                            //document.getElementById("startDate").value = formatDate_yyyymmdd(startDate);
-                            //document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
-                            alert(document.getElementById("startDate"));
+
                             alert(startDate);
                             alert(formatDate_yyyymmdd(startDate));
-                            document.getElementById("startDate").value = "2021-11-10";
-                            document.getElementById("endDate").value = "2021-11-11";                            
+                            document.getElementById("startDate").value = formatDate_yyyymmdd(startDate);
+                            document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
+
+                            //document.getElementById("startDate").value = "2021-11-10";
+                            //document.getElementById("endDate").value = "2021-11-11";                            
                             
                         },
                         function(error) {
