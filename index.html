@@ -142,7 +142,24 @@
                 var newAppointment = blankAppointment;
                 newAppointment.participant[0].actor.reference = "Patient/" + patientId;
                 newAppointment.slot.reference = "Slot/" + slotId;
-                alert("newAppointment : \n" + newAppointment);
+                //alert("newAppointment : \n" + newAppointment);
+
+                client.create(newAppointment(), {})
+                .then(
+                    function(data) {
+                    console.log(data);
+                });
+
+                // // echo the newly created appointment (or any error)
+                // .then(
+                //     function(appts) {
+                //         document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
+                //     },
+                //     function(error) {
+                //         document.getElementById("appointments").innerText = error.stack;
+                //     }
+                // );
+
             }
 
             function GetSlots()
@@ -223,6 +240,8 @@
 
     </head>
     <body>
+        <input type="button" value="Get Slots" onclick="GetSlots()">
+        <br/>
         <div id="slotsTable"></div>
         <br/>
         <h4>Current Patient</h4>
@@ -233,8 +252,8 @@
         <br/>
         <h4>Slots</h4>
         <div id="slots">Loading...</div>
-        <br/>
-        <input type="button" value="Get Slots" onclick="GetSlots()">
+        
+        
 
         <script type="text/javascript">
             FHIR.oauth2.ready().then(function(client) {
