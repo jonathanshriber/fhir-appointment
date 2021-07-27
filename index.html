@@ -39,9 +39,8 @@
                     <tr>
                         <th>Service Type
                             <select id="serviceType" onchange="GetSelectedSlots()">
-                                <option value''>Choose...</option>
                                 <option value'EVisit'>EVisit</option>
-                                <option value='WellChild'>Well Child Check</option>
+                                <option value='Well Child Check'>Well Child Check</option>
                             </select>
                         </th>
                         <th>Slot ID</th>
@@ -179,6 +178,7 @@
                             document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
 
                             // set service/slot type control value
+                            alert("serviceType:" + serviceType);
                             document.getElementById("serviceType").value = serviceType;
                         },
                         function(error) {
