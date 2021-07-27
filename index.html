@@ -140,10 +140,11 @@
 
                 // get service/slot type
                 var service = document.getElementById("serviceType");
-                if(serviceType == null)
-                    service = 'EVisit'
+                var serviceType;
+                if(service == null)
+                    serviceType = 'EVisit'
                 else
-                    service = serviceType.options[serviceType.selectedIndex].text;
+                    serviceType = service.options[service.selectedIndex].text;
 
 
                 // get Slot
@@ -178,7 +179,7 @@
                             document.getElementById("endDate").value = formatDate_yyyymmdd(endDate);
 
                             // set service/slot type control value
-                            document.getElementById("serviceType").value = service;
+                            document.getElementById("serviceType").value = serviceType;
                         },
                         function(error) {
                             document.getElementById("slots").innerText = error.stack;
