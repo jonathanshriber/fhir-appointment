@@ -52,13 +52,9 @@
             function getServiceType(slot)
             {
                 var serviceDesc = "";
-                slot.resource.type.forEach(service => {
-                    if(service.coding.length > 0)
-                        serviceDesc = service.coding[0].display;
-                    //service.coding.forEach(code => {
-                    //    serviceDesc += code.display;
-                    //});
-                });
+                if(slot.resource.type.coding.length > 0)
+                    serviceDesc = slot.resource.type.coding[0].display;
+
                 return serviceDesc;
             }
 
