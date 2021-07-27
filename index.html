@@ -145,7 +145,7 @@
                 //alert("newAppointment : \n" + newAppointment);
 
                 FHIR.oauth2.ready().then(function(client) {
-                    client.create(newAppointment(), {})
+                    client.create(newAppointment, {})
                     .then(
                         function(data) {
                         console.log(data);
