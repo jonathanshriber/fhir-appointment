@@ -43,22 +43,6 @@
                     }
                 );
                 
-//                // smarthealthit tutorial uses MedicationRequest
-//                // Get MedicationRequests for the selected patient
-//                client.request("/MedicationRequest?patient=" + client.patient.id, {
-//                    resolveReferences: [ "medicationReference" ],
-//                    graph: true
-//                })
-//                
-//                // Reject if no MedicationRequests are found
-//                .then(function(data) {
-//                    if (!data.entry || !data.entry.length) {
-//                        throw new Error("No medications found for the selected patient");
-//                    }
-//                    return data.entry;
-//                })
-
-                
                 // Cerner code console does not offer scope for MedicationRequest - MedicationStatement instead
                 // Get MedicationStatements for the selected patient
                 client.request("/MedicationStatement?patient=" + client.patient.id, {
@@ -122,7 +106,8 @@
 
                 
                 // get Slot
-                client.request("/Slot?_id=31732041-21304876-63506106-0", {})
+                //client.request("/Slot?_id=31732041-21304876-63506106-0", {})
+                client.request("/Slot?service-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387&start=ge2021-07-27T00:00:00.000Z&start=lt2021-07-28T00:00:00.000Z&_format=json", {})
 
                 // Reject if no Slots are found
                 .then(function(data) {
