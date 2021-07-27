@@ -148,7 +148,7 @@
                     .then(
                         function(data) {
                         console.log(data);
-                        document.getElementById("appointmentDiv").html = data.text.div;
+                        document.getElementById("appointmentDiv").innerHTML = data.text.div;
                     });
 
                     // // echo the newly created appointment (or any error)
