@@ -148,6 +148,7 @@
                     .then(
                         function(data) {
                         console.log(data);
+                        document.getElementById("appointmentDiv").html = data.text.div;
                     });
 
                     // // echo the newly created appointment (or any error)
@@ -241,6 +242,8 @@
 
     </head>
     <body>
+        <div id="appointmentDiv"></div>
+        <br/>        
         <input type="button" value="Get Slots" onclick="GetSlots()">
         <br/>
         <div id="slotsTable"></div>
