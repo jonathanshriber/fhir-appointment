@@ -141,8 +141,7 @@
                 alert(slotId);
                 var newAppointment = blankAppointment;
                 newAppointment.participant[0].actor.reference = "Patient/" + patientId;
-                newAppointment.slot.reference = "Slot/" + slotId;
-                //alert("newAppointment : \n" + newAppointment);
+                newAppointment.slot[0].reference = "Slot/" + slotId;
 
                 FHIR.oauth2.ready().then(function(client) {
                     client.create(newAppointment, {})
