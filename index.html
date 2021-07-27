@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Example SMART App</title>
+        <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
+        <style>
+            #patient, #meds, #appointments, #slots, #schedules {
+                font-family: Monaco, monospace;
+                white-space: pre;
+                font-size: 13px;
+                height: 30vh;
+                overflow: scroll;
+                border: 1px solid #CCC;
+            }
+        </style>
+    </head>
+    <body>
+        <h4>Current Patient</h4>
+        <div id="patient">Loading...</div>
+        <br/>
+        <h4>Medications</h4>
+        <div id="meds">Loading...</div>
+        <br/>
+        <h4>Appointments</h4>
+        <div id="appointments">Loading...</div>
+        <br/>
+        <h4>Slots</h4>
+        <div id="slots">Loading...</div>
+        <br/>
+        <h4>Schedules</h4>
+        <div id="schedules">Loading...</div>
+        <script type="text/javascript">
+            FHIR.oauth2.ready().then(function(client) {
+                
+                // Render the current patient (or any error)
+                client.patient.read().then(
+                    function(pt) {
+                        document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
+                    },
+                    function(error) {
+                        document.getElementById("patient").innerText = error.stack;
+                    }
+                );
+                
+//                // smarthealthit tutorial uses MedicationRequest
+//                // Get MedicationRequests for the selected patient
+//                client.request("/MedicationRequest?patient=" + client.patient.id, {
+//                    resolveReferences: [ "medicationReference" ],
+//                    graph: true
+//                })
+//                
+//                // Reject if no MedicationRequests are found
+//                .then(function(data) {
+//                    if (!data.entry || !data.entry.length) {
+//                        throw new Error("No medications found for the selected patient");
+//                    }
+//                    return data.entry;
+//                })
+
+                
+                // Cerner code console does not offer scope for MedicationRequest - MedicationStatement instead
+                // Get MedicationStatements for the selected patient
+                client.request("/MedicationStatement?patient=" + client.patient.id, {
+                    resolveReferences: [ "medicationReference" ],
+                    graph: true
+                })
+                
+                // Reject if no MedicationStatements are found
+                .then(function(data) {
+                    if (!data.entry || !data.entry.length) {
+                        throw new Error("No medications found for the selected patient");
+                    }
+                    return data.entry;
+                })
+
+                // Render the current patient's medications (or any error)
+                .then(
+                    function(meds) {
+                        document.getElementById("meds").innerText = JSON.stringify(meds, null, 4);
+                    },
+                    function(error) {
+                        document.getElementById("meds").innerText = error.stack;
+                    }
+                );
+
+
+
+                //== Appointment create =============================================================================================
+                // client.create(dummyAppointment(), {})
+                // .then(
+                //     function(data) {
+                //     console.log(data);
+                // });
+                //===================================================================================================================
+
+
+                
+                // get created Appointment
+                //client.request("/Appointment?patient=" + client.patient.id + "&_id=4829518", {})
+                client.request("/Appointment?_id=4829518", {})
+
+                // Reject if no Appointments are found
+                .then(function(data) {
+                    if (!data.entry || !data.entry.length) {
+                        throw new Error("No appointments found for the selected patient");
+                    }
+                    return data.entry;
+                })
+
+                // Render the current patient's appointments (or any error)
+                .then(
+                    function(appts) {
+                        document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
+                    },
+                    function(error) {
+                        document.getElementById("appointments").innerText = error.stack;
+                    }
+                );
+
+
+
+                
+                // get Slot
+                client.request("/Slot?_id=31732041-21304876-63506106-0", {})
+
+                // Reject if no Slots are found
+                .then(function(data) {
+                    if (!data.entry || !data.entry.length) {
+                        throw new Error("No slots found for the selected patient");
+                    }
+                    return data.entry;
+                })
+
+                // Render the current patient's slots (or any error)
+                .then(
+                    function(slots) {
+                        document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
+                    },
+                    function(error) {
+                        document.getElementById("slots").innerText = error.stack;
+                    }
+                );
+
+
+
+                
+                // get Schedule
+                client.request("/Schedule?_id=31732041-21304876-63506106-0", {})
+
+                // Reject if no Schedules are found
+                .then(function(data) {
+                    if (!data.entry || !data.entry.length) {
+                        throw new Error("No schedules found for the selected patient");
+                    }
+                    return data.entry;
+                })
+
+                // Render the current patient's schedules (or any error)
+                .then(
+                    function(schedules) {
+                        document.getElementById("schedules").innerText = JSON.stringify(schedules, null, 4);
+                    },
+                    function(error) {
+                        document.getElementById("schedules").innerText = error.stack;
+                    }
+                );                
+
+            }).catch(console.error);
+
+            function dummyAppointment()
+            {
+                return {
+                "resourceType": "Appointment",
+                "status": "proposed",
+                "comment": "Appointment request comment",
+                "participant": [
+                    {
+                    "actor": {
+                        "reference": "Patient/12724065"
+                    },
+                    "status": "needs-action"
+                    }
+                ],
+                "slot": [{
+                    "reference": "Slot/31732041-21304876-63506106-0"
+                }]
+                };
+            }
+                        
+        </script>
+    </body>
+</html> 
