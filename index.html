@@ -32,6 +32,11 @@
         </style>
 
         <script language="javascript">
+
+            let serviceTypeDict = {"EVisit": "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|2572307909", 
+                                   "Well Child Visit": "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249",
+                                   "PT Eval": "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|26054577"};
+
             function GetSlotsTable(slotsData)
             {
                 var html = `
@@ -148,7 +153,8 @@
 
                 // get Slot
                 var slotQuery = "/Slot?";
-                slotQuery += "slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387" + "&";
+                //slotQuery += "slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387" + "&";
+                slotQuery += "slot-type=" + serviceTypeDict[serviceType] + "&";
                 slotQuery += "start=ge" + formatDate_yyyymmdd_zeroHour(startDate) + "&";
                 slotQuery += "start=lt" + formatDate_yyyymmdd_zeroHour(endDate);
                 alert(slotQuery);
