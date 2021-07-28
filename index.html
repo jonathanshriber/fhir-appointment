@@ -157,6 +157,23 @@
                 }).catch(console.error);
             }
 
+            function GetPatientInContext()
+            {
+                FHIR.oauth2.ready().then(function(client) {
+                    
+                    // Render the current patient (or any error)
+                    client.patient.read().then(
+                        function(pt) {
+                            document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
+                            patientId = pt.id;
+                        },
+                        function(error) {
+                            document.getElementById("patient").innerText = error.stack;
+                        }
+                    );
+                }).catch(console.error);
+            }
+
             function GetSlots()
             {
                 var startDate;
@@ -229,7 +246,7 @@
         </script>
 
     </head>
-    <body onload="GetSlots()">
+    <body onload="GetPatientInContext(); GetSlots()">
 
 
         <table style="width: 100%">
