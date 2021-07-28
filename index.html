@@ -136,12 +136,14 @@
                 newAppointment.slot[0].reference = "Slot/" + slotId;
 
                 FHIR.oauth2.ready().then(function(client) {
+                    // create the Appointment
                     client.create(newAppointment, {})
                     .then(
                         function(appData) {
                         console.log(appData);
                         document.getElementById("appointmentDiv").innerHTML = appData.text.div;
 
+                        // Now get the Slot
                         client.request("/Slot?_id=" + slotId, {})
                         // Reject if no Slot is found
                         .then(function(slotData) {
@@ -149,7 +151,22 @@
                                 throw new Error("No slot found for id " + slotId);
                             }
                             if(slotData.entry.length > 0)
+                            {
                                 document.getElementById("slotDiv").innerHTML = slotData.entry[0].resource.text.div;
+
+                                // Now get the Schedule
+                                client.request("/" + slotData.entry[0].resource.schedule.reference, {})
+                                // Reject if no Schedule is found
+                                .then(function(scheduleData) {
+                                    if (!scheduleData.entry || !scheduleData.entry.length) {
+                                        throw new Error("No slot found for id " + slotId);
+                                    }
+                                    if(scheduleData.entry.length > 0)
+                                        document.getElementById("scheduleDiv").innerHTML = scheduleData.entry[0].resource.text.div;
+                                });                                
+                            }
+
+
                         });
                     });
 
@@ -258,9 +275,9 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td><div id="appointmentDiv"></div></td>
-                    <td><div id="slotDiv"></div></td>
-                    <td><div id="scheduleDiv"></div></td>
+                    <td style="vertical-align:top"><div id="appointmentDiv"></div></td>
+                    <td style="vertical-align:top"><div id="slotDiv"></div></td>
+                    <td style="vertical-align:top"><div id="scheduleDiv"></div></td>
                 </tr>
             </tbody>
         </table>
