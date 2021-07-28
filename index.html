@@ -141,18 +141,19 @@
                         function(appData) {
                         console.log(appData);
                         document.getElementById("appointmentDiv").innerHTML = appData.text.div;
-                        //document.getElementById("scheduleDiv").innerHTML = appData.text.div;
+
+                        client.request("/Slot?_id=" + slotId, {})
+                        // Reject if no Slot is found
+                        .then(function(slotData) {
+                            if (!slotData.entry || !slotData.entry.length) {
+                                throw new Error("No slot found for id " + slotId);
+                            }
+                            if(slotData.entry.length > 0)
+                                document.getElementById("slotDiv").innerHTML = slotData.entry[0].resource.text.div;
+                        });
                     });
 
-                    client.request("/Slot?_id=" + slotId, {})
-                    // Reject if no Appointments are found
-                    .then(function(slotData) {
-                        if (!slotData.entry || !slotData.entry.length) {
-                            throw new Error("No appointments found for the selected patient");
-                        }
-                        if(slotData.entry.length > 0)
-                            document.getElementById("slotDiv").innerHTML = slotData.entry[0].resource.text.div;
-                    });
+
 
                 }).catch(console.error);
             }
