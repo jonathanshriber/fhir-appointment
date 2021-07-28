@@ -150,7 +150,8 @@
                         if (!slotData.entry || !slotData.entry.length) {
                             throw new Error("No appointments found for the selected patient");
                         }
-                        document.getElementById("slotDiv").innerHTML = slotData.text.div;
+                        if(slotData.entry.length > 0)
+                            document.getElementById("slotDiv").innerHTML = slotData.entry[0].resource.text.div;
                     });
 
                 }).catch(console.error);
