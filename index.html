@@ -6,7 +6,7 @@
         <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
-            #patientJson, #appointmentJson, #slotJson, #scheduleJson {
+            #patientJson, #appointmentJson, #slotJson, #scheduleJson, #slotsJson {
                 font-family: Monaco, monospace;
                 white-space: pre;
                 font-size: 13px;
@@ -246,7 +246,7 @@
                     // Render the slots (or any error)
                     .then(
                         function(slots) {
-                            document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
+                            document.getElementById("slotsJson").innerText = JSON.stringify(slots, null, 4);
                             GetSlotsTable(slots);
 
                             // set date control values
@@ -257,7 +257,7 @@
                             document.getElementById("serviceType").value = serviceType;
                         },
                         function(error) {
-                            document.getElementById("slots").innerText = error.stack;
+                            document.getElementById("slotsJson").innerText = error.stack;
                         }
                     );
                 }).catch(console.error);
@@ -299,6 +299,9 @@
         <br/>
         <h4>Schedule</h4>
         <div id="scheduleJson"></div>
+        <br/>
+        <h4>Slots</h4>
+        <div id="slotsJson"></div>
 
         <script type="text/javascript">
             // FHIR.oauth2.ready().then(function(client) {
