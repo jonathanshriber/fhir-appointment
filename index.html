@@ -138,22 +138,21 @@
                 FHIR.oauth2.ready().then(function(client) {
                     client.create(newAppointment, {})
                     .then(
-                        function(data) {
-                        console.log(data);
-                        document.getElementById("appointmentDiv").innerHTML = data.text.div;
-                        document.getElementById("slotDiv").innerHTML = data.text.div;
-                        document.getElementById("scheduleDiv").innerHTML = data.text.div;
+                        function(appData) {
+                        console.log(appData);
+                        document.getElementById("appointmentDiv").innerHTML = appData.text.div;
+                        //document.getElementById("scheduleDiv").innerHTML = appData.text.div;
                     });
 
-                    // // echo the newly created appointment (or any error)
-                    // .then(
-                    //     function(appts) {
-                    //         document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
-                    //     },
-                    //     function(error) {
-                    //         document.getElementById("appointments").innerText = error.stack;
-                    //     }
-                    // );
+                    client.request("/Slot?_id=" + slotId, {})
+                    // Reject if no Appointments are found
+                    .then(function(slotData) {
+                        if (!slotData.entry || !slotData.entry.length) {
+                            throw new Error("No appointments found for the selected patient");
+                        }
+                        document.getElementById("slotDiv").innerHTML = slotData.text.div;
+                    });
+
                 }).catch(console.error);
             }
 
