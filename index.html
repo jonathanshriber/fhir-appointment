@@ -62,15 +62,15 @@
                 <table>
                     <tr>
                         <th>Service Type
-                            <select id="serviceType" onchange="GetSelectedSlots()">
+                            <select id="serviceType">
                                 <option value'EVisit'>EVisit</option>
                                 <option value='Well Child Check'>Well Child Check</option>
                                 <option value='Video Visit'>Video Visit</option>
                             </select>
                         </th>
                         <th>Slot ID</th>
-                        <th>Start <input type="date" id="startDate" name="startDate" onchange="GetSelectedSlots()"></th>
-                        <th>End <input type="date" id="endDate" name="endDate" onchange="GetSelectedSlots()"></th>
+                        <th>Start <input type="date" id="startDate" name="startDate"></th>
+                        <th>End <input type="date" id="endDate" name="endDate"></th>
                         <th>Status</th>
                     </tr>
                     `;
@@ -244,42 +244,42 @@
         <div id="slots">Loading...</div>
 
         <script type="text/javascript">
-            FHIR.oauth2.ready().then(function(client) {
+            // FHIR.oauth2.ready().then(function(client) {
                 
-                // Render the current patient (or any error)
-                client.patient.read().then(
-                    function(pt) {
-                        document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
-                        patientId = pt.id;
-                    },
-                    function(error) {
-                        document.getElementById("patient").innerText = error.stack;
-                    }
-                );
+            //     // Render the current patient (or any error)
+            //     client.patient.read().then(
+            //         function(pt) {
+            //             document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
+            //             patientId = pt.id;
+            //         },
+            //         function(error) {
+            //             document.getElementById("patient").innerText = error.stack;
+            //         }
+            //     );
                 
-                // get created Appointment
-                //client.request("/Appointment?patient=" + client.patient.id + "&_id=4829518", {})
-                client.request("/Appointment?_id=4829518", {})
+            //     // get created Appointment
+            //     //client.request("/Appointment?patient=" + client.patient.id + "&_id=4829518", {})
+            //     client.request("/Appointment?_id=4829518", {})
 
-                // Reject if no Appointments are found
-                .then(function(data) {
-                    if (!data.entry || !data.entry.length) {
-                        throw new Error("No appointments found for the selected patient");
-                    }
-                    return data.entry;
-                })
+            //     // Reject if no Appointments are found
+            //     .then(function(data) {
+            //         if (!data.entry || !data.entry.length) {
+            //             throw new Error("No appointments found for the selected patient");
+            //         }
+            //         return data.entry;
+            //     })
 
-                // Render the current patient's appointments (or any error)
-                .then(
-                    function(appts) {
-                        document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
-                    },
-                    function(error) {
-                        document.getElementById("appointments").innerText = error.stack;
-                    }
-                );
+            //     // Render the current patient's appointments (or any error)
+            //     .then(
+            //         function(appts) {
+            //             document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
+            //         },
+            //         function(error) {
+            //             document.getElementById("appointments").innerText = error.stack;
+            //         }
+            //     );
 
-            }).catch(console.error);
+            // }).catch(console.error);
                         
         </script>
     </body>
