@@ -158,11 +158,10 @@
                                 client.request("/" + slotData.entry[0].resource.schedule.reference, {})
                                 // Reject if no Schedule is found
                                 .then(function(scheduleData) {
-                                    if (!scheduleData.entry || !scheduleData.entry.length) {
-                                        throw new Error("No slot found for id " + slotId);
+                                    if (!scheduleData) {
+                                        throw new Error("No schedule found for id " + slotId);
                                     }
-                                    if(scheduleData.entry.length > 0)
-                                        document.getElementById("scheduleDiv").innerHTML = scheduleData.entry[0].resource.text.div;
+                                    document.getElementById("scheduleDiv").innerHTML = scheduleData.text.div;
                                 });                                
                             }
 
