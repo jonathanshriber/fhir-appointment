@@ -6,7 +6,7 @@
         <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
-            #patient, #appointments, #slots {
+            #patientJson, #appointmentJson, #slotJson, #scheduleJson {
                 font-family: Monaco, monospace;
                 white-space: pre;
                 font-size: 13px;
@@ -142,6 +142,7 @@
                         function(appData) {
                         console.log(appData);
                         document.getElementById("appointmentDiv").innerHTML = appData.text.div;
+                        document.getElementById("appointmentJson").innerText = JSON.stringify(appData, null, 4);
 
                         // Now get the Slot
                         client.request("/Slot?_id=" + slotId, {})
@@ -153,6 +154,7 @@
                             if(slotData.entry.length > 0)
                             {
                                 document.getElementById("slotDiv").innerHTML = slotData.entry[0].resource.text.div;
+                                document.getElementById("slotJson").innerText = JSON.stringify(slotData, null, 4);
 
                                 // Now get the Schedule
                                 client.request("/" + slotData.entry[0].resource.schedule.reference, {})
@@ -162,6 +164,7 @@
                                         throw new Error("No schedule found for id " + slotId);
                                     }
                                     document.getElementById("scheduleDiv").innerHTML = scheduleData.text.div;
+                                    document.getElementById("scheduleJson").innerText = JSON.stringify(scheduleData, null, 4);
                                 });                                
                             }
 
@@ -181,11 +184,11 @@
                     // Render the current patient (or any error)
                     client.patient.read().then(
                         function(pt) {
-                            document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
+                            document.getElementById("patientJson").innerText = JSON.stringify(pt, null, 4);
                             patientId = pt.id;
                         },
                         function(error) {
-                            document.getElementById("patient").innerText = error.stack;
+                            document.getElementById("patientJson").innerText = error.stack;
                         }
                     );
                 }).catch(console.error);
@@ -227,7 +230,7 @@
                 slotQuery += "slot-type=" + serviceTypeDict[serviceType] + "&";
                 slotQuery += "start=ge" + formatDate_yyyymmdd_zeroHour(startDate) + "&";
                 slotQuery += "start=lt" + formatDate_yyyymmdd_zeroHour(endDate);
-                alert(slotQuery);
+                //alert(slotQuery);
 
                 FHIR.oauth2.ready().then(function(client) {
                     client.request(slotQuery, {})
@@ -280,23 +283,22 @@
                 </tr>
             </tbody>
         </table>
-
-
-
-        
         <br/>        
         <input type="button" value="Get Slots" onclick="GetSlots()">
         <br/>
         <div id="slotsTable"></div>
         <br/>
         <h4>Current Patient</h4>
-        <div id="patient">Loading...</div>
+        <div id="patientJson"></div>
         <br/>
-        <h4>Appointments</h4>
-        <div id="appointments">Loading...</div>
+        <h4>Appointment</h4>
+        <div id="appointmentJson"></div>
         <br/>
-        <h4>Slots</h4>
-        <div id="slots">Loading...</div>
+        <h4>Slot</h4>
+        <div id="slotJson"></div>
+        <br/>
+        <h4>Schedule</h4>
+        <div id="scheduleJson"></div>
 
         <script type="text/javascript">
             // FHIR.oauth2.ready().then(function(client) {
