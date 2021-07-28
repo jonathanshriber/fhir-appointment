@@ -54,7 +54,7 @@
                 "slot": [{
                     "reference": ""
                 }]
-                };
+            };
 
             function GetSlotsTable(slotsData)
             {
@@ -98,6 +98,7 @@
                 return serviceDesc;
             }
 
+            // return YYYY-MM-DD 00:00
             function formatDate_mmddyyyy_hhmm(dateString)
             {
                 var d = new Date(dateString);
@@ -108,17 +109,7 @@
                     ":" + (d.getUTCMinutes() < 10 ? '0' + d.getUTCMinutes() : d.getUTCMinutes() );
             }
 
-
-            function formatDate_mmddyyyy_hhmmssZ(dateString)
-            {
-                var d = new Date(dateString);
-                return ((d.getUTCMonth()+1) < 10 ? '0' + (d.getUTCMonth()+1) : (d.getUTCMonth()+1)) + 
-                    "/" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate() ) + 
-                    "/" + d.getUTCFullYear() +
-                    " " + (d.getUTCHours() < 10 ? '0' + d.getUTCHours() : d.getUTCHours() )+ 
-                    ":" + (d.getUTCMinutes() < 10 ? '0' + d.getUTCMinutes() : d.getUTCMinutes() );
-            }
-
+            // return YYYY-MM-DD
             function formatDate_yyyymmdd(dateString)
             {
                 var d = new Date(dateString);
@@ -127,6 +118,7 @@
                     "-" + (d.getUTCDate() < 10 ? '0' + d.getUTCDate() : d.getUTCDate());
             }
             
+            // return YYYY-MM-DDT00:00:00.000Z
             function formatDate_yyyymmdd_zeroHour(dateString)
             {
                 var d = new Date(dateString);
@@ -161,7 +153,6 @@
                     //     }
                     // );
                 }).catch(console.error);
-
             }
 
             function GetSlots()
@@ -203,9 +194,6 @@
                 alert(slotQuery);
 
                 FHIR.oauth2.ready().then(function(client) {
-
-                    //==================================================================================================
-                    //client.request("/Slot?slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387&start=ge2021-07-27T00:00:00.000Z&start=lt2021-07-28T00:00:00.000Z", {})
                     client.request(slotQuery, {})
 
                     // Reject if no Slots are found
@@ -216,7 +204,7 @@
                         return data.entry;
                     })
 
-                    // Render the current patient's slots (or any error)
+                    // Render the slots (or any error)
                     .then(
                         function(slots) {
                             document.getElementById("slots").innerText = JSON.stringify(slots, null, 4);
@@ -233,9 +221,7 @@
                             document.getElementById("slots").innerText = error.stack;
                         }
                     );
-                    //=========================================================================================================
-                    }).catch(console.error);
-           
+                }).catch(console.error);
             }
 
         </script>
@@ -256,8 +242,6 @@
         <br/>
         <h4>Slots</h4>
         <div id="slots">Loading...</div>
-        
-        
 
         <script type="text/javascript">
             FHIR.oauth2.ready().then(function(client) {
@@ -272,17 +256,6 @@
                         document.getElementById("patient").innerText = error.stack;
                     }
                 );
-
-
-                //== Appointment create =============================================================================================
-                // client.create(dummyAppointment(), {})
-                // .then(
-                //     function(data) {
-                //     console.log(data);
-                // });
-                //===================================================================================================================
-
-
                 
                 // get created Appointment
                 //client.request("/Appointment?patient=" + client.patient.id + "&_id=4829518", {})
@@ -307,26 +280,6 @@
                 );
 
             }).catch(console.error);
-
-            function dummyAppointment()
-            {
-                return {
-                "resourceType": "Appointment",
-                "status": "proposed",
-                "comment": "Appointment request comment",
-                "participant": [
-                    {
-                    "actor": {
-                        "reference": "Patient/12724065"
-                    },
-                    "status": "needs-action"
-                    }
-                ],
-                "slot": [{
-                    "reference": "Slot/31732041-21304876-63506106-0"
-                }]
-                };
-            }
                         
         </script>
     </body>
