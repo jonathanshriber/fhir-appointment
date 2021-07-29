@@ -180,9 +180,9 @@
                 }).catch(console.error);
             }
 
-            function GetPatientInContext()
+            function GetPatientInContext(client)
             {
-                FHIR.oauth2.ready().then(function(client) {
+                //FHIR.oauth2.ready().then(function(client) {
                     
                     // Render the current patient (or any error)
                     client.patient.read().then(
@@ -194,10 +194,10 @@
                             document.getElementById("patientJson").innerText = error.stack;
                         }
                     );
-                }).catch(console.error);
+                //}).catch(console.error);
             }
 
-            function GetSlots()
+            function GetSlots(client)
             {
                 var startDate;
                 var endDate;
@@ -235,13 +235,13 @@
                 //alert(slotQuery);
 
                 // get Slot
-                FHIR.oauth2.ready().then(function(client) {
+                //FHIR.oauth2.ready().then(function(client) {
                     client.request(slotQuery, {})
 
                     // Reject if no Slots are found
                     .then(function(data) {
                         if (!data.entry || !data.entry.length) {
-                            throw new Error("No slots found for the selected patient");
+                            throw new Error("No slots found.");
                         }
                         return data.entry;
                     })
@@ -266,13 +266,14 @@
                             document.getElementById("slotsJson").innerText = error.stack;
                         }
                     );
-                }).catch(console.error);
+                //}).catch(console.error);
             }
 
         </script>
 
     </head>
-    <body onload="GetPatientInContext(); GetSlots()">
+    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetSlots(client);})">
+
         <table class="fhirResource" style="width: 100%">
             <colgroup>
                <col span="1" style="width: 33%;">
