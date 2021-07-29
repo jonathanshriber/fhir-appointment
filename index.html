@@ -236,7 +236,7 @@
 
                 // get Slot
                 FHIR.oauth2.ready().then(function(client) {
-                    client.request(slotQuery, {})
+                    client.request(slotQuery, {resolveReferences: ["schedule"]})
 
                     // Reject if no Slots are found
                     .then(function(data) {
