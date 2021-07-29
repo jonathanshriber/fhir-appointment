@@ -182,7 +182,7 @@
 
             function GetPatientInContext(client)
             {
-                //FHIR.oauth2.ready().then(function(client) {
+                FHIR.oauth2.ready().then(function(client) {
                     
                     // Render the current patient (or any error)
                     client.patient.read().then(
@@ -194,7 +194,7 @@
                             document.getElementById("patientJson").innerText = error.stack;
                         }
                     );
-                //}).catch(console.error);
+                }).catch(console.error);
             }
 
             function GetSlots(client)
@@ -235,7 +235,7 @@
                 //alert(slotQuery);
 
                 // get Slot
-                //FHIR.oauth2.ready().then(function(client) {
+                FHIR.oauth2.ready().then(function(client) {
                     client.request(slotQuery, {})
 
                     // Reject if no Slots are found
@@ -266,7 +266,7 @@
                             document.getElementById("slotsJson").innerText = error.stack;
                         }
                     );
-                //}).catch(console.error);
+                }).catch(console.error);
             }
 
         </script>
