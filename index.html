@@ -20,12 +20,19 @@
                 font-size: 14px;
 
             } 
-            table, th, td {
+            table.slot{
               border: 1px solid black;
               border-collapse: collapse;
               font-size: 14px;
             }
-            th, td {
+            td.slotRow {
+              border: 1px solid black;
+              border-collapse: collapse;
+              padding: 5px;
+            }
+            th.slotHeader {
+              border: 1px solid black;
+              border-collapse: collapse;
               padding: 5px;
             }
 
@@ -56,32 +63,31 @@
                 }]
             };
 
-            function GetSlotsTable(slotsData)
+            function DrawSlotsTable(slotsData)
             {
                 var html = `
-                <table>
+                <table class="slot">
                     <tr>
-                        <th>Service Type
+                        <th class="slotHeader">Service Type
                             <select id="serviceType">
                                 <option value'EVisit'>EVisit</option>
                                 <option value='Well Child Check'>Well Child Check</option>
                                 <option value='Video Visit'>Video Visit</option>
                             </select>
                         </th>
-                        <th>Slot ID</th>
-                        <th>Start <input type="date" id="startDate" name="startDate"></th>
-                        <th>End <input type="date" id="endDate" name="endDate"></th>
-                        <th>Status</th>
+                        <th class="slotHeader">Slot ID</th>
+                        <th class="slotHeader">Start <input type="date" id="startDate" name="startDate"></th>
+                        <th class="slotHeader">End <input type="date" id="endDate" name="endDate"></th>
+                        <th class="slotHeader">Status</th>
                     </tr>
                     `;
                 slotsData.forEach(slot => {
                     html += '<tr>';
-                    html += '<td>' + getServiceType(slot) + '</td>'; 
-                    html += '<td>' + slot.resource.id + '</td>';
-                    //html += '<td>' + slot.resource.schedule.reference + '</td>';
-                    html += '<td>' + formatDate_mmddyyyy_hhmm(slot.resource.start) + '</td>';
-                    html += '<td>' + formatDate_mmddyyyy_hhmm(slot.resource.end) + '</td>';
-                    html += '<td><a onclick="MakeAppointment(\'' + slot.resource.id + '\')" href="#">' + slot.resource.freeBusyType + '</a></td>';
+                    html += '<td class="slotRow">' + getServiceType(slot) + '</td>'; 
+                    html += '<td class="slotRow">' + slot.resource.id + '</td>';
+                    html += '<td class="slotRow">' + formatDate_mmddyyyy_hhmm(slot.resource.start) + '</td>';
+                    html += '<td class="slotRow">' + formatDate_mmddyyyy_hhmm(slot.resource.end) + '</td>';
+                    html += '<td class="slotRow"><a onclick="MakeAppointment(\'' + slot.resource.id + '\')" href="#">' + slot.resource.freeBusyType + '</a></td>';
                     html +='</tr>'
                 });
                 html += '</table>';
@@ -130,7 +136,7 @@
 
             function MakeAppointment(slotId)
             {
-                alert(slotId);
+                alert("Make appointment for slot " + slotId);
                 var newAppointment = blankAppointment;
                 newAppointment.participant[0].actor.reference = "Patient/" + patientId;
                 newAppointment.slot[0].reference = "Slot/" + slotId;
@@ -141,6 +147,8 @@
                     .then(
                         function(appData) {
                         console.log(appData);
+                        
+                        // echo the appointment
                         document.getElementById("appointmentDiv").innerHTML = appData.text.div;
                         document.getElementById("appointmentJson").innerText = JSON.stringify(appData, null, 4);
 
@@ -167,13 +175,8 @@
                                     document.getElementById("scheduleJson").innerText = JSON.stringify(scheduleData, null, 4);
                                 });                                
                             }
-
-
                         });
                     });
-
-
-
                 }).catch(console.error);
             }
 
@@ -224,14 +227,14 @@
                 else
                     serviceType = service.options[service.selectedIndex].text;
 
-                // get Slot
+                // Slot request query string ex: Slot?slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|2572307909&start=ge2021-07-29T00:00:00.000Z&start=lt2021-07-30T00:00:00.000Z
                 var slotQuery = "/Slot?";
-                //slotQuery += "slot-type=https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387" + "&";
                 slotQuery += "slot-type=" + serviceTypeDict[serviceType] + "&";
                 slotQuery += "start=ge" + formatDate_yyyymmdd_zeroHour(startDate) + "&";
                 slotQuery += "start=lt" + formatDate_yyyymmdd_zeroHour(endDate);
                 //alert(slotQuery);
 
+                // get Slot
                 FHIR.oauth2.ready().then(function(client) {
                     client.request(slotQuery, {})
 
@@ -246,8 +249,11 @@
                     // Render the slots (or any error)
                     .then(
                         function(slots) {
+                            // echo Slots JSON
                             document.getElementById("slotsJson").innerText = JSON.stringify(slots, null, 4);
-                            GetSlotsTable(slots);
+                            
+                            // show the selected slots
+                            DrawSlotsTable(slots);
 
                             // set date control values
                             document.getElementById("startDate").value = formatDate_yyyymmdd(startDate);
@@ -267,9 +273,7 @@
 
     </head>
     <body onload="GetPatientInContext(); GetSlots()">
-
-
-        <table style="width: 100%">
+        <table class="fhirResource" style="width: 100%">
             <colgroup>
                <col span="1" style="width: 33%;">
                <col span="1" style="width: 33%;">
@@ -302,45 +306,5 @@
         <br/>
         <h4>Slots</h4>
         <div id="slotsJson"></div>
-
-        <script type="text/javascript">
-            // FHIR.oauth2.ready().then(function(client) {
-                
-            //     // Render the current patient (or any error)
-            //     client.patient.read().then(
-            //         function(pt) {
-            //             document.getElementById("patient").innerText = JSON.stringify(pt, null, 4);
-            //             patientId = pt.id;
-            //         },
-            //         function(error) {
-            //             document.getElementById("patient").innerText = error.stack;
-            //         }
-            //     );
-                
-            //     // get created Appointment
-            //     //client.request("/Appointment?patient=" + client.patient.id + "&_id=4829518", {})
-            //     client.request("/Appointment?_id=4829518", {})
-
-            //     // Reject if no Appointments are found
-            //     .then(function(data) {
-            //         if (!data.entry || !data.entry.length) {
-            //             throw new Error("No appointments found for the selected patient");
-            //         }
-            //         return data.entry;
-            //     })
-
-            //     // Render the current patient's appointments (or any error)
-            //     .then(
-            //         function(appts) {
-            //             document.getElementById("appointments").innerText = JSON.stringify(appts, null, 4);
-            //         },
-            //         function(error) {
-            //             document.getElementById("appointments").innerText = error.stack;
-            //         }
-            //     );
-
-            // }).catch(console.error);
-                        
-        </script>
     </body>
 </html> 
