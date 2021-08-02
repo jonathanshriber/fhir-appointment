@@ -78,8 +78,8 @@
                         <th class="slotHeader">Slot ID</th>
                         <th class="slotHeader">Start<input type="date" id="startDate" name="startDate"></th>
                         <th class="slotHeader">End<input type="date" id="endDate" name="endDate"></th>
-                        <th class="slotHeader">Actor<input type="date" id="actor" name="actor"></th>
-                        <th class="slotHeader">Location<input type="date" id="location" name="location"></th>
+                        <th class="slotHeader">Actor</th>
+                        <th class="slotHeader">Location</th>
                         <th class="slotHeader">Status</th>
                     </tr>
                     `;
@@ -192,6 +192,7 @@
                     client.patient.read().then(
                         function(pt) {
                             document.getElementById("patientJson").innerText = JSON.stringify(pt, null, 4);
+                            document.getElementById("patientName").innerHTML = pt.name[0].text;
                             patientId = pt.id;
                         },
                         function(error) {
@@ -277,7 +278,7 @@
 
     </head>
     <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetSlots(client);})">
-
+        <h1>Patient:<div id="patientName"></div></h1>
         <table class="fhirResource" style="width: 100%">
             <colgroup>
                <col span="1" style="width: 33%;">
