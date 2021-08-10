@@ -122,7 +122,7 @@
                     html += '<tr>';
                     html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
                     appt.resource.participant.forEach(p => {
-                        if(p.actor.reference.includes("Practitioner"))
+                        if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
                             html += '<td class="apptRow">' + p.display + '</td>';
                     });
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
