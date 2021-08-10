@@ -41,6 +41,7 @@
               font-size: 14px;
             }
             td.apptRow {
+              border: 1px solid black;
               border-collapse: collapse;
               padding: 5px;
             }
@@ -119,6 +120,7 @@
                 });
                 html += '</table>';
                 $("#slotsTable").html(html);
+                console.log(html);
             }
 
             function DrawAppointmentsTable(apptsData)
@@ -141,7 +143,7 @@
                         if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
                             html += '<td class="apptRow">' + p.actor.display + '</td>';
                         else
-                        html += '<td class="apptRow"></td>';
+                            html += '<td class="apptRow"></td>';
                     });
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
@@ -149,6 +151,7 @@
                 });
                 html += '</table>';
                 $("#apptsTable").html(html);
+                console.log(html);
             }
 
             function getServiceType(slot)
