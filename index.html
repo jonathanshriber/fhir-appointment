@@ -35,6 +35,13 @@
               border-collapse: collapse;
               padding: 5px;
             }
+            span {
+                font-family: Monaco, monospace;
+                font-size: 18px;
+            }  
+            span.label {
+                font-weight: bold;
+            }            
 
         </style>
 
@@ -278,7 +285,7 @@
 
     </head>
     <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetSlots(client);})">
-        <h1>Patient:<div id="patientName"></div></h1>
+        <span class="label">Patient:&nbsp;</span><span id="patientName"></span>
         <table class="fhirResource" style="width: 100%">
             <colgroup>
                <col span="1" style="width: 33%;">
