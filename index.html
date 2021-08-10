@@ -56,6 +56,8 @@
         <script language="javascript">
 
             var patientId = "";
+            var startDate;
+            var endDate;
 
             var serviceTypeDict = {"EVisit": "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|2572307909", 
                                    "Well Child Check": "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/14249|25367387",
@@ -243,6 +245,11 @@
                     client.patient.read().then(
                         function(pt) {
                             apptQuery += pt.id;
+                            var today = new Date();
+                            var tomorrow = new Date();
+                            tomorrow.setDate(today.getDate() + 1);
+                            apptQuery += "date=ge" + formatDate_yyyymmdd_zeroHour((startDate == null) ? today : startDate) + "&";
+                            apptQuery += "date=lt" + formatDate_yyyymmdd_zeroHour((endDate == null) ? tomorrow : endDate);                            
                             client.request(apptQuery, {})
                             .then(function(data) {
                                 if (!data.entry || !data.entry.length) {
@@ -270,8 +277,8 @@
 
             function GetSlots(client)
             {
-                var startDate;
-                var endDate;
+                //var startDate;
+                //var endDate;
                 var today = new Date();
                 var tomorrow = new Date();
                 tomorrow.setDate(today.getDate() + 1);
