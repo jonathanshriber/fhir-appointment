@@ -102,7 +102,7 @@
                         <th class="slotHeader">Slot ID</th>
                         <th class="slotHeader">Start<input type="date" id="startDate" name="startDate"></th>
                         <th class="slotHeader">End<input type="date" id="endDate" name="endDate"></th>
-                        <th class="slotHeader">Actor</th>
+                        <th class="slotHeader">Practitioner</th>
                         <th class="slotHeader">Location</th>
                         <th class="slotHeader">Status</th>
                     </tr>
@@ -131,16 +131,18 @@
                 <table class="appt">
                     <tr>
                         <th class="apptHeader">Appointment Type</th>
-                        <th class="apptHeader">Practitioner</th>
-                        <th class="apptHeader">Location</th>
                         <th class="apptHeader">Start</th>
                         <th class="apptHeader">End</th>
+                        <th class="apptHeader">Practitioner</th>
+                        <th class="apptHeader">Location</th>
                     </tr>
                     `;
                 apptsData.forEach(appt => {
                     html += '<tr>';
                     html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
-                    
+                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
+                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
+
                     var practitionerDisplay = '';
                     appt.resource.participant.forEach(p => {
                         if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
@@ -155,8 +157,6 @@
                     });
                     html += '<td class="apptRow">' + locationDisplay + '</td>';                    
                     
-                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
-                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
                     html +='</tr>'
                 });
                 html += '</table>';
