@@ -139,12 +139,12 @@
                 apptsData.forEach(appt => {
                     html += '<tr>';
                     html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
+                    var actorDisplay = '';
                     appt.resource.participant.forEach(p => {
                         if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
-                            html += '<td class="apptRow">' + p.actor.display + '</td>';
-                        else
-                            html += '<td class="apptRow"></td>';
+                            actorDisplay = p.actor.display;
                     });
+                    html += '<td class="apptRow">' + p.actor.display + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
                     html +='</tr>'
