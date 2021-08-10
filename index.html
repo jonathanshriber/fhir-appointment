@@ -132,6 +132,7 @@
                     <tr>
                         <th class="apptHeader">Appointment Type</th>
                         <th class="apptHeader">Practitioner</th>
+                        <th class="apptHeader">Location</th>
                         <th class="apptHeader">Start</th>
                         <th class="apptHeader">End</th>
                     </tr>
@@ -139,12 +140,21 @@
                 apptsData.forEach(appt => {
                     html += '<tr>';
                     html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
-                    var actorDisplay = '';
+                    
+                    var practitionerDisplay = '';
                     appt.resource.participant.forEach(p => {
                         if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
-                            actorDisplay = p.actor.display;
+                        practitionerDisplay = p.actor.display;
                     });
-                    html += '<td class="apptRow">' + actorDisplay + '</td>';
+                    html += '<td class="apptRow">' + practitionerDisplay + '</td>';
+                    
+                    var locationDisplay = '';
+                    appt.resource.participant.forEach(p => {
+                        if(p.actor.reference != null && p.actor.reference.includes("Location"))
+                        locationDisplay = p.actor.display;
+                    });
+                    html += '<td class="apptRow">' + locationDisplay + '</td>';                    
+                    
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
                     html +='</tr>'
