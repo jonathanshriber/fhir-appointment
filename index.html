@@ -245,6 +245,7 @@
                     client.patient.read().then(
                         function(pt) {
                             apptQuery += pt.id;
+                            apptQuery += "&";
                             var today = new Date();
                             var tomorrow = new Date();
                             tomorrow.setDate(today.getDate() + 1);
