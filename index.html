@@ -144,7 +144,7 @@
                         if(p.actor.reference != null && p.actor.reference.includes("Practitioner"))
                             actorDisplay = p.actor.display;
                     });
-                    html += '<td class="apptRow">' + p.actor.display + '</td>';
+                    html += '<td class="apptRow">' + actorDisplay + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
                     html +='</tr>'
