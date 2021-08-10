@@ -120,7 +120,7 @@
                 var html = '<table class="appt">';
                     apptsData.forEach(appt => {
                     html += '<tr>';
-                    html += '<td class="apptRow">' + appt.resource.type[0].text + '</td>';
+                    html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
                     appt.resource.participant.forEach(p => {
                         if(p.actor.reference.includes("Practitioner"))
                             html += '<td class="apptRow">' + p.display + '</td>';
