@@ -6,7 +6,7 @@
         <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
-            #patientJson, #appointmentJson, #slotJson, #scheduleJson, #slotsJson {
+            #patientJson, #appointmentJson, #slotJson, #scheduleJson, #slotsJson, #apptsJson {
                 font-family: Monaco, monospace;
                 white-space: pre;
                 font-size: 13px;
@@ -32,6 +32,14 @@
             }
             th.slotHeader {
               border: 1px solid black;
+              border-collapse: collapse;
+              padding: 5px;
+            }
+            table.appt{
+              border-collapse: collapse;
+              font-size: 14px;
+            }
+            td.apptRow {
               border-collapse: collapse;
               padding: 5px;
             }
@@ -103,6 +111,25 @@
                 });
                 html += '</table>';
                 $("#slotsTable").html(html);
+            }
+
+            function DrawAppointmentsTable(apptsData)
+            {
+                var html = '<table class="appt">';
+                    apptsData.forEach(appt => {
+                    html += '<tr>';
+                    html += '<td class="apptRow">' + appt.resource.type[0].text + '</td>';
+                    appt.resource.participant.forEach(p => {
+                        if(p.actor.reference.includes("Practitioner"))
+                            html += '<td class="apptRow">' + p.display + '</td>';
+                            break;
+                    });
+                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
+                    html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.end) + '</td>';
+                    html +='</tr>'
+                });
+                html += '</table>';
+                $("#apptsTable").html(html);
             }
 
             function getServiceType(slot)
@@ -209,6 +236,35 @@
                 }).catch(console.error);
             }
 
+            function GetAppointmentsForPatient(client)
+            {
+
+                // Appointment request query string ex: /Appointment?patient=12724065&date=ge2021-08-10T00:00:00.000-05:00&date=lt2021-08-11T00:00:00.000-05:00&_format=json
+                var apptQuery = "/Appointment?patient={patientId}";
+
+                FHIR.oauth2.ready().then(function(client) {
+                    client.request(slotQuery, {})
+
+                    .then(function(data) {
+                        if (!data.entry || !data.entry.length) {
+                            throw new Error("No slots found.");
+                        }
+                        return data.entry;
+                    })                    
+                    .then(
+                        function(appts) {
+                            // echo Appointments JSON
+                            document.getElementById("apptsJson").innerText = JSON.stringify(appts, null, 4);
+                            DrawAppointmentsTable(appts);
+                        },
+                        function(error) {
+                            document.getElementById("apptsJson").innerText = error.stack;
+                        }
+                    );
+
+                }).catch(console.error);
+            }
+
             function GetSlots(client)
             {
                 var startDate;
@@ -284,8 +340,10 @@
         </script>
 
     </head>
-    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetSlots(client);})">
+    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetAppointmentsForPatient(client); GetSlots(client);})">
         <span class="label">Patient:&nbsp;</span><span id="patientName"></span>
+        <div id="apptsTable"></div>
+        <hr>
         <table class="fhirResource" style="width: 100%">
             <colgroup>
                <col span="1" style="width: 33%;">
@@ -319,5 +377,8 @@
         <br/>
         <h4>Slots</h4>
         <div id="slotsJson"></div>
+        <br/>
+        <h4>Appointments</h4>
+        <div id="apptsJson"></div>        
     </body>
 </html> 
