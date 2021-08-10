@@ -120,7 +120,6 @@
                 });
                 html += '</table>';
                 $("#slotsTable").html(html);
-                console.log(html);
             }
 
             function DrawAppointmentsTable(apptsData)
@@ -137,7 +136,11 @@
                         <th class="apptHeader">Location</th>
                     </tr>
                     `;
-                apptsData.forEach(appt => {
+                if(apptsData == null)
+                    html += '<tr><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td></tr>'
+                else
+                {
+                    apptsData.forEach(appt => {
                     html += '<tr>';
                     html += '<td class="apptRow">' + appt.resource.type.text + '</td>';
                     html += '<td class="apptRow">' + formatDate_mmddyyyy_hhmm(appt.resource.start) + '</td>';
@@ -158,10 +161,11 @@
                     html += '<td class="apptRow">' + locationDisplay + '</td>';                    
                     
                     html +='</tr>'
-                });
+                    
+                    });
+                }   
                 html += '</table>';
                 $("#apptsTable").html(html);
-                console.log(html);
             }
 
             function getServiceType(slot)
@@ -285,7 +289,8 @@
                             client.request(apptQuery, {})
                             .then(function(data) {
                                 if (!data.entry || !data.entry.length) {
-                                    throw new Error("No appointments found.");
+                                    //throw new Error("No appointments found.");
+                                    return null;
                                 }
                                 return data.entry;
                             })                    
