@@ -137,7 +137,7 @@
                     </tr>
                     `;
                 if(apptsData == null)
-                    html += '<tr><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td><td class="apptRow"></td></tr>'
+                    html += '<tr><td class="apptRow">&nbsp;</td><td class="apptRow">&nbsp;</td><td class="apptRow">&nbsp;</td><td class="apptRow">&nbsp;</td><td class="apptRow">&nbsp;</td></tr>'
                 else
                 {
                     apptsData.forEach(appt => {
@@ -252,9 +252,11 @@
                         });
                     });
                 }).catch(console.error);
+
+                GetAppointmentsForPatient();
             }
 
-            function GetPatientInContext(client)
+            function GetPatientInContext()
             {
                 FHIR.oauth2.ready().then(function(client) {
                     
@@ -272,7 +274,7 @@
                 }).catch(console.error);
             }
 
-            function GetAppointmentsForPatient(client)
+            function GetAppointmentsForPatient()
             {
                 // Appointment request query string ex: /Appointment?patient=12724065&date=ge2021-08-10T00:00:00.000-05:00&date=lt2021-08-11T00:00:00.000-05:00&_format=json
                 var apptQuery = "/Appointment?patient=";
@@ -312,7 +314,7 @@
                 }).catch(console.error);
             }
 
-            function GetSlots(client)
+            function GetSlots()
             {
                 //var startDate;
                 //var endDate;
@@ -383,13 +385,13 @@
                     );
                 }).catch(console.error);
 
-                GetAppointmentsForPatient(client);
+                GetAppointmentsForPatient();
             }
 
         </script>
 
     </head>
-    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetAppointmentsForPatient(client); GetSlots(client);})">
+    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(); GetAppointmentsForPatient(); GetSlots();})">
         <span class="label">Patient:&nbsp;</span><span id="patientName"></span>
         <br>
         <div id="apptsTable"></div>
