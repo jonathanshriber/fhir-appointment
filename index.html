@@ -226,6 +226,9 @@
                         document.getElementById("appointmentDiv").innerHTML = appData.text.div;
                         document.getElementById("appointmentJson").innerText = JSON.stringify(appData, null, 4);
 
+                        // re-query Appointments
+                        GetAppointmentsForPatient(client);
+
                         // Now get the Slot
                         client.request("/Slot?_id=" + slotId, {})
                         // Reject if no Slot is found
@@ -253,10 +256,9 @@
                     });
                 }).catch(console.error);
 
-                GetAppointmentsForPatient();
             }
 
-            function GetPatientInContext()
+            function GetPatientInContext(client)
             {
                 FHIR.oauth2.ready().then(function(client) {
                     
@@ -274,7 +276,7 @@
                 }).catch(console.error);
             }
 
-            function GetAppointmentsForPatient()
+            function GetAppointmentsForPatient(client)
             {
                 // Appointment request query string ex: /Appointment?patient=12724065&date=ge2021-08-10T00:00:00.000-05:00&date=lt2021-08-11T00:00:00.000-05:00&_format=json
                 var apptQuery = "/Appointment?patient=";
@@ -314,7 +316,7 @@
                 }).catch(console.error);
             }
 
-            function GetSlots()
+            function GetSlots(client)
             {
                 //var startDate;
                 //var endDate;
@@ -385,13 +387,13 @@
                     );
                 }).catch(console.error);
 
-                GetAppointmentsForPatient();
+                GetAppointmentsForPatient(client);
             }
 
         </script>
 
     </head>
-    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(); GetAppointmentsForPatient(); GetSlots();})">
+    <body onload="FHIR.oauth2.ready().then(function(client){GetPatientInContext(client); GetAppointmentsForPatient(client); GetSlots(client);})">
         <span class="label">Patient:&nbsp;</span><span id="patientName"></span>
         <br>
         <div id="apptsTable"></div>
